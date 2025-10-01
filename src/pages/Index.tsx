@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AppState } from "@/types/fitness";
-import { getTodayName, getTodayDate } from "@/utils/fitness";
+import { getTodayName, getTodayDate, saveAppState, loadAppState } from "@/utils/fitness";
 import Dashboard from "@/components/Dashboard";
 import Workouts from "@/components/Workouts";
 import Nutrition from "@/components/Nutrition";
@@ -47,9 +47,19 @@ const Index = () => {
     lastVisitDate: null
   });
 
+  // Load saved state on initial render
   useEffect(() => {
+    const savedState = loadAppState();
+    if (savedState) {
+      setAppState(savedState);
+    }
     resetDailyStatus();
   }, []);
+  
+  // Save state whenever it changes
+  useEffect(() => {
+    saveAppState(appState);
+  }, [appState]);
 
   const resetDailyStatus = () => {
     const todayStr = getTodayDate();

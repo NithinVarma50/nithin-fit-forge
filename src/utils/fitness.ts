@@ -21,3 +21,22 @@ export function getTodayName(): string {
 export function getTodayDate(): string {
   return new Date().toISOString().split('T')[0];
 }
+
+// Storage utility functions
+export function saveAppState(appState: any): void {
+  try {
+    localStorage.setItem('fitForgeAppState', JSON.stringify(appState));
+  } catch (error) {
+    console.error('Error saving app state to localStorage:', error);
+  }
+}
+
+export function loadAppState(): any | null {
+  try {
+    const savedState = localStorage.getItem('fitForgeAppState');
+    return savedState ? JSON.parse(savedState) : null;
+  } catch (error) {
+    console.error('Error loading app state from localStorage:', error);
+    return null;
+  }
+}
