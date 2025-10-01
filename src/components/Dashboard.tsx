@@ -7,6 +7,7 @@ import { callGeminiAPI } from "@/utils/gemini";
 import { toast } from "sonner";
 import NutritionBar from "./NutritionBar";
 import WeightChart from "./WeightChart";
+import NotificationSettings from "./NotificationSettings";
 
 interface DashboardProps {
   appState: AppState;
@@ -143,6 +144,10 @@ const Dashboard = ({ appState, onCheckin }: DashboardProps) => {
           )}
         </div>
       </Card>
+
+      <div className="lg:col-span-4">
+        <NotificationSettings />
+      </div>
 
       <Card className="lg:col-span-4 p-6">
         <h3 className="text-lg font-semibold mb-4">Today's Nutrition Goals</h3>
