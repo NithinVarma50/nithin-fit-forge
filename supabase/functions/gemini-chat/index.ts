@@ -1,3 +1,6 @@
+// deno-lint-ignore-file no-explicit-any
+// @ts-ignore: Deno runtime import for Supabase Edge Functions
+// @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -7,7 +10,7 @@ const corsHeaders = {
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -20,12 +23,9 @@ serve(async (req) => {
     }
 
     const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
-    
     if (!GEMINI_API_KEY) {
       throw new Error("GEMINI_API_KEY is not configured");
     }
-
-    console.log("Calling Gemini API with prompt:", prompt.substring(0, 100));
 
     const payload = {
       contents: [{
@@ -45,15 +45,13 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`Gemini API Error: ${response.status} - ${errorText}`);
-      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      throw new Error(`API Error: ${response.status} ${response.statusText}\n${errorText}`);
     }
 
     const result = await response.json();
     const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (text) {
-      console.log("Gemini API response received successfully");
       return new Response(
         JSON.stringify({ text }),
         {
@@ -64,7 +62,6 @@ serve(async (req) => {
       throw new Error("No content received from Gemini API.");
     }
   } catch (error: any) {
-    console.error("Error in gemini-chat function:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
       {
