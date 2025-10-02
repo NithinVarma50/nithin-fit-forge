@@ -11,9 +11,12 @@ import { toast } from "sonner";
 interface NutritionProps {
   appState: AppState;
   onMealAdd: (calories: number, protein: number) => void;
+  onResetNutrition: () => void;
+  onUndoMeal: () => void;
+  canUndo: boolean;
 }
 
-const Nutrition = ({ appState, onMealAdd }: NutritionProps) => {
+const Nutrition = ({ appState, onMealAdd, onResetNutrition, onUndoMeal, canUndo }: NutritionProps) => {
   const [mealType, setMealType] = useState("Breakfast");
   const [calories, setCalories] = useState("");
   const [protein, setProtein] = useState("");
@@ -92,6 +95,28 @@ const Nutrition = ({ appState, onMealAdd }: NutritionProps) => {
           <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
             Add Meal
           </Button>
+          <div className="flex gap-2 mt-2">
+            <Button 
+              type="button"
+              variant="outline" 
+              onClick={onUndoMeal}
+              disabled={!canUndo}
+              className="flex-1"
+            >
+              Undo Last Meal
+            </Button>
+            <Button 
+              type="button"
+              variant="destructive" 
+              onClick={() => {
+                onResetNutrition();
+                toast.success("Nutrition reset successfully!");
+              }}
+              className="flex-1"
+            >
+              Reset Today's Goals
+            </Button>
+          </div>
         </form>
       </Card>
 

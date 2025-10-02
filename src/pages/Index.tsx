@@ -113,15 +113,49 @@ const Index = () => {
     });
   };
 
+  const [nutritionHistory, setNutritionHistory] = useState<Array<{ calories: number; protein: number }>>([]);
+
   const handleMealAdd = (calories: number, protein: number) => {
+    setAppState(prev => {
+      // Save current state to history before adding new meal
+      setNutritionHistory(history => [...history, { calories: prev.nutrition.calories, protein: prev.nutrition.protein }]);
+      
+      return {
+        ...prev,
+        nutrition: {
+          ...prev.nutrition,
+          calories: prev.nutrition.calories + calories,
+          protein: prev.nutrition.protein + protein
+        }
+      };
+    });
+  };
+
+  const handleResetNutrition = () => {
     setAppState(prev => ({
       ...prev,
       nutrition: {
         ...prev.nutrition,
-        calories: prev.nutrition.calories + calories,
-        protein: prev.nutrition.protein + protein
+        calories: 0,
+        protein: 0
       }
     }));
+    setNutritionHistory([]);
+  };
+
+  const handleUndoMeal = () => {
+    if (nutritionHistory.length > 0) {
+      const previousState = nutritionHistory[nutritionHistory.length - 1];
+      setAppState(prev => ({
+        ...prev,
+        nutrition: {
+          ...prev.nutrition,
+          calories: previousState.calories,
+          protein: previousState.protein
+        }
+      }));
+      setNutritionHistory(history => history.slice(0, -1));
+    }
   };
 
   const handleReminderSet = (time: string) => {
@@ -173,7 +207,13 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="nutrition">
-            <Nutrition appState={appState} onMealAdd={handleMealAdd} />
+            <Nutrition 
+              appState={appState} 
+              onMealAdd={handleMealAdd} 
+              onResetNutrition={handleResetNutrition}
+              onUndoMeal={handleUndoMeal}
+              canUndo={nutritionHistory.length > 0}
+            />
           </TabsContent>
 
           <TabsContent value="progress">
