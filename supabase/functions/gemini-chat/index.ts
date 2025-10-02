@@ -8,7 +8,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent';
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -22,24 +22,24 @@ serve(async (req: Request) => {
       throw new Error("Prompt is required");
     }
 
-    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
-    console.log('GEMINI_API_KEY exists:', !!GEMINI_API_KEY);
-    console.log('GEMINI_API_KEY length:', GEMINI_API_KEY?.length);
-    if (!GEMINI_API_KEY) {
-      throw new Error("GEMINI_API_KEY is not configured");
+    const OPENROUTER_API_KEY = Deno.env.get('GEMINI_API_KEY');
+    console.log('OPENROUTER_API_KEY exists:', !!OPENROUTER_API_KEY);
+    console.log('OPENROUTER_API_KEY length:', OPENROUTER_API_KEY?.length);
+    if (!OPENROUTER_API_KEY) {
+      throw new Error("OPENROUTER_API_KEY is not configured");
     }
 
     const payload = {
-      contents: [{
-        parts: [{
-          text: prompt
-        }]
-      }]
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'user', content: prompt }
+      ]
     };
 
-    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload)
@@ -47,12 +47,12 @@ serve(async (req: Request) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Gemini API Error:', response.status, errorText);
+      console.error('OpenRouter API Error:', response.status, errorText);
       throw new Error(`API Error: ${response.status} ${response.statusText}\n${errorText}`);
     }
 
     const result = await response.json();
-    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+    const text = result.choices?.[0]?.message?.content;
 
     if (text) {
       return new Response(
