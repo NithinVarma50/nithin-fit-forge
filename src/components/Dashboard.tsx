@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AppState } from "@/types/fitness";
 import { getTodayName } from "@/utils/fitness";
-import { callGeminiAPI } from "@/utils/gemini";
+import { callGeminiAPIRaw } from "@/utils/gemini";
 import { toast } from "sonner";
 import NutritionBar from "./NutritionBar";
 import WeightChart from "./WeightChart";
@@ -43,8 +43,8 @@ const Dashboard = ({ appState, onCheckin }: DashboardProps) => {
     setIsLoadingMotivation(true);
     try {
       const prompt = "Give me a short, powerful, Gen-Z style motivational quote for a young guy named Nithin who is focused on bulking up and hitting the gym. Make it energetic and straight to the point.";
-      const result = await callGeminiAPI(prompt);
-      setMotivation(result);
+      const text = await callGeminiAPIRaw(prompt);
+      setMotivation(text);
     } catch (error) {
       setMotivation("Push through the pain, Nithin! Every rep counts! 💪");
     } finally {

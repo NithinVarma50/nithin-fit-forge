@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AppState } from "@/types/fitness";
 import { calculateAge, formatHeight } from "@/utils/fitness";
-import { callGeminiAPI } from "@/utils/gemini";
+import { callGeminiAPIRaw } from "@/utils/gemini";
 import { toast } from "sonner";
 import WeightChart from "./WeightChart";
 
@@ -21,8 +21,8 @@ const Progress = ({ appState, onWeightUpdate }: ProgressProps) => {
     setIsLoadingSummary(true);
     try {
       const prompt = `I'm an 18-year-old named ${appState.user.name}, and my goal is bulking. This month, my weight went from ${appState.user.initialWeight}kg to ${appState.user.currentWeight}kg. I maintained a workout streak of ${appState.workoutStreak} days. Write a short, encouraging, Gen-Z style summary of my progress and give me one motivational tip for next month.`;
-      const result = await callGeminiAPI(prompt);
-      setAiSummary(result);
+      const text = await callGeminiAPIRaw(prompt);
+      setAiSummary(text);
     } catch (error) {
       toast.error("Failed to generate summary. Please try again.");
     } finally {
