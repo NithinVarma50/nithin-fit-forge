@@ -8,7 +8,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent';
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -23,6 +23,8 @@ serve(async (req: Request) => {
     }
 
     const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
+    console.log('GEMINI_API_KEY exists:', !!GEMINI_API_KEY);
+    console.log('GEMINI_API_KEY length:', GEMINI_API_KEY?.length);
     if (!GEMINI_API_KEY) {
       throw new Error("GEMINI_API_KEY is not configured");
     }
@@ -45,6 +47,7 @@ serve(async (req: Request) => {
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error('Gemini API Error:', response.status, errorText);
       throw new Error(`API Error: ${response.status} ${response.statusText}\n${errorText}`);
     }
 
