@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AppState } from "@/types/fitness";
 import { callGeminiAPI } from "@/utils/gemini";
 import { toast } from "sonner";
+import RecipeCard from "@/components/RecipeCard";
 
 interface NutritionProps {
   appState: AppState;
@@ -23,6 +24,7 @@ const Nutrition = ({ appState, onMealAdd, onResetNutrition, onUndoMeal, canUndo 
   const [foodSuggestions, setFoodSuggestions] = useState<string>(
     "Log your first meal to get personalized suggestions!"
   );
+  const [structuredRecipe, setStructuredRecipe] = useState<any>(null);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -41,11 +43,21 @@ const Nutrition = ({ appState, onMealAdd, onResetNutrition, onUndoMeal, canUndo 
     setIsLoadingSuggestions(true);
     try {
       const { calories: currentCal, protein: currentPro, calorieGoal, proteinGoal } = appState.nutrition;
-      const prompt = `My fitness goal is bulking for muscle gain. Today I need to consume ${calorieGoal} calories and ${proteinGoal}g of protein. So far, I've had ${Math.round(currentCal)} calories and ${Math.round(currentPro)}g of protein. Suggest a simple, high-protein Indian meal or snack I can have next to help me reach my goal. Be specific and give one option.`;
-      const result = await callGeminiAPI(prompt);
-      setFoodSuggestions(result);
+      const prompt = `My fitness goal is bulking for muscle gain. Today I need to consume ${calorieGoal} calories and ${proteinGoal}g of protein. So far, I've had ${Math.round(currentCal)} calories and ${Math.round(currentPro)}g of protein. Suggest a simple, high-protein Indian meal or snack I can have next to help me reach my goal. Include ingredients with amounts, preparation steps, and nutritional information.`;
+      
+      const result = await callGeminiAPI(prompt, "recipe");
+      
+      if (result.type === "recipe") {
+        setStructuredRecipe(result.content);
+        setFoodSuggestions(result.content.description);
+      } else {
+        // Fallback to text display if parsing failed
+        setFoodSuggestions(result.content);
+        setStructuredRecipe(null);
+      }
     } catch (error) {
       toast.error("Failed to generate meal ideas. Please try again.");
+      setFoodSuggestions("Failed to generate meal ideas. Please try again.");
     } finally {
       setIsLoadingSuggestions(false);
     }
@@ -123,18 +135,37 @@ const Nutrition = ({ appState, onMealAdd, onResetNutrition, onUndoMeal, canUndo 
       <Card className="p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Dietary Suggestions</h2>
-          <Button 
-            onClick={handleGenerateMealIdeas}
-            disabled={isLoadingSuggestions}
-            size="sm"
-          >
-            <span className="mr-2">✨</span>
-            Generate Meal Ideas
-          </Button>
+          <div className="flex gap-2">
+            {structuredRecipe && (
+              <Button
+                onClick={() => setStructuredRecipe(null)}
+                size="sm"
+                variant="outline"
+              >
+                <span className="mr-2">📝</span>
+                Text View
+              </Button>
+            )}
+            <Button 
+              onClick={handleGenerateMealIdeas}
+              disabled={isLoadingSuggestions}
+              size="sm"
+            >
+              <span className="mr-2">✨</span>
+              Generate Meal Ideas
+            </Button>
+          </div>
         </div>
         <div className="space-y-3 text-card-foreground min-h-[150px]">
           {isLoadingSuggestions ? (
             <div className="animate-pulse">Generating meal ideas...</div>
+          ) : structuredRecipe ? (
+            <RecipeCard 
+              title={structuredRecipe.title}
+              description={structuredRecipe.description}
+              sections={structuredRecipe.sections}
+              totalNutrition={structuredRecipe.totalNutrition}
+            />
           ) : (
             <p>{foodSuggestions}</p>
           )}

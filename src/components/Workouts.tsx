@@ -28,8 +28,11 @@ const Workouts = ({ appState, onReminderSet }: WorkoutsProps) => {
     setLoadingVariations(day);
     try {
       const prompt = `I'm doing a workout called "${workout.name}". My current exercises are: ${workout.exercises.join(', ')}. My main goal is bulking. Suggest 2-3 alternative dumbbell exercises I can do instead to target the same muscle groups. Keep it short and list them simply.`;
-      const result = await callGeminiAPI(prompt);
-      setVariations(prev => ({ ...prev, [day]: result }));
+      const result = await callGeminiAPI(prompt, "workout");
+      
+      // Use the content regardless of whether it was parsed as structured data or not
+      const variationText = result.type === "workout" ? result.content.description : result.content;
+      setVariations(prev => ({ ...prev, [day]: variationText }));
     } catch (error) {
       toast.error("Failed to generate variations. Please try again.");
     } finally {
