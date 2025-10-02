@@ -8,6 +8,7 @@ import { AppState } from "@/types/fitness";
 import { callGeminiAPI } from "@/utils/gemini";
 import { toast } from "sonner";
 import RecipeCard from "@/components/RecipeCard";
+import { StructuredRecipe } from "@/utils/aiParser";
 
 interface NutritionProps {
   appState: AppState;
@@ -24,7 +25,7 @@ const Nutrition = ({ appState, onMealAdd, onResetNutrition, onUndoMeal, canUndo 
   const [foodSuggestions, setFoodSuggestions] = useState<string>(
     "Log your first meal to get personalized suggestions!"
   );
-  const [structuredRecipe, setStructuredRecipe] = useState<any>(null);
+  const [structuredRecipe, setStructuredRecipe] = useState<StructuredRecipe | null>(null);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {

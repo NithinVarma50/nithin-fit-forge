@@ -31,7 +31,10 @@ const Workouts = ({ appState, onReminderSet }: WorkoutsProps) => {
       const result = await callGeminiAPI(prompt, "workout");
       
       // Use the content regardless of whether it was parsed as structured data or not
-      const variationText = result.type === "workout" ? result.content.description : result.content;
+      const variationText = result.type === "workout" && result.content && typeof result.content === 'object' && 'description' in result.content 
+        ? result.content.description 
+        : typeof result.content === 'string' ? result.content : 'No variations available';
+      
       setVariations(prev => ({ ...prev, [day]: variationText }));
     } catch (error) {
       toast.error("Failed to generate variations. Please try again.");
