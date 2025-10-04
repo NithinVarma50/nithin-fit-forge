@@ -7,6 +7,7 @@ import Dashboard from "@/components/Dashboard";
 import Workouts from "@/components/Workouts";
 import Nutrition from "@/components/Nutrition";
 import Progress from "@/components/Progress";
+import AIHub from "@/pages/AIHub";
 
 const Index = () => {
   const [appState, setAppState] = useState<AppState>({
@@ -191,11 +192,12 @@ const Index = () => {
         </header>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="workouts">Workouts</TabsTrigger>
             <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
-            <TabsTrigger value="progress">Profile & Progress</TabsTrigger>
+            <TabsTrigger value="ai-hub">AI Hub</TabsTrigger>
+            <TabsTrigger value="progress">Progress</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard">
@@ -214,6 +216,10 @@ const Index = () => {
               onUndoMeal={handleUndoMeal}
               canUndo={nutritionHistory.length > 0}
             />
+          </TabsContent>
+
+          <TabsContent value="ai-hub">
+            <AIHub appState={appState} />
           </TabsContent>
 
           <TabsContent value="progress">

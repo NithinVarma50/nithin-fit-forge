@@ -20,7 +20,35 @@ const Progress = ({ appState, onWeightUpdate }: ProgressProps) => {
   const handleGenerateSummary = async () => {
     setIsLoadingSummary(true);
     try {
-      const prompt = `I'm an 18-year-old named ${appState.user.name}, and my goal is bulking. This month, my weight went from ${appState.user.initialWeight}kg to ${appState.user.currentWeight}kg. I maintained a workout streak of ${appState.workoutStreak} days. Write a short, encouraging, Gen-Z style summary of my progress and give me one motivational tip for next month.`;
+      const age = Math.floor((new Date().getTime() - new Date(appState.user.dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+      const weightChange = appState.user.currentWeight - appState.user.initialWeight;
+      const avgCalories = Math.round(appState.nutrition.calories);
+      const avgProtein = Math.round(appState.nutrition.protein);
+      
+      const prompt = `Analyze this fitness progress for ${appState.user.name} (${age} years old) with bulking goals:
+
+**Progress Data:**
+- Weight Change: ${appState.user.initialWeight}kg → ${appState.user.currentWeight}kg (${weightChange > 0 ? '+' : ''}${weightChange.toFixed(1)}kg)
+- Target: ${appState.user.goals.targetWeight}
+- Workout Streak: ${appState.workoutStreak} days
+- Today's Nutrition: ${avgCalories}/${appState.nutrition.calorieGoal} kcal, ${avgProtein}/${appState.nutrition.proteinGoal}g protein
+
+Provide a detailed analysis in this format:
+
+**📊 Progress Analysis**
+[Evaluate weight gain rate, consistency, and overall progress]
+
+**💪 Strengths**
+[List 2-3 things being done well]
+
+**🎯 Areas for Improvement**
+[List 2-3 specific areas to focus on]
+
+**🚀 Next Month Action Plan**
+[3-4 concrete, actionable steps to optimize results]
+
+Keep it motivating, data-driven, and Gen-Z friendly!`;
+      
       const text = await callGeminiAPIRaw(prompt);
       setAiSummary(text);
     } catch (error) {
