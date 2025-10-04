@@ -43,8 +43,20 @@ const Nutrition = ({ appState, onMealAdd, onResetNutrition, onUndoMeal, canUndo 
   const handleGenerateMealIdeas = async () => {
     setIsLoadingSuggestions(true);
     try {
+      // Determine meal type based on current time
+      const currentHour = new Date().getHours();
+      let suggestedMealType = "Breakfast";
+      
+      if (currentHour >= 19) {
+        suggestedMealType = "Dinner";
+      } else if (currentHour >= 14) {
+        suggestedMealType = "Snack";
+      } else if (currentHour >= 11) {
+        suggestedMealType = "Lunch";
+      }
+      
       const { calories: currentCal, protein: currentPro, calorieGoal, proteinGoal } = appState.nutrition;
-      const prompt = `My fitness goal is bulking for muscle gain. Today I need to consume ${calorieGoal} calories and ${proteinGoal}g of protein. So far, I've had ${Math.round(currentCal)} calories and ${Math.round(currentPro)}g of protein. I'm looking for ${mealType} options. Suggest 3-5 simple, high-protein Indian ${mealType.toLowerCase()} meals or options I can have to help me reach my goal. For each option, include ingredients with amounts, preparation steps, and nutritional information.`;
+      const prompt = `My fitness goal is bulking for muscle gain. Today I need to consume ${calorieGoal} calories and ${proteinGoal}g of protein. So far, I've had ${Math.round(currentCal)} calories and ${Math.round(currentPro)}g of protein. I'm looking for ${suggestedMealType} options. Suggest 3-5 simple, high-protein Indian ${suggestedMealType.toLowerCase()} meals or options I can have to help me reach my goal. For each option, include ingredients with amounts, preparation steps, and nutritional information.`;
       
       const result = await callGeminiAPI(prompt, "recipe");
       
