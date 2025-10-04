@@ -92,16 +92,33 @@ export function parseRecipeText(text: string): StructuredRecipe {
       step: line.replace(/^[\d\.\)-]+\s*/, '').trim()
     }));
 
-    // Extract nutrition info
-    const nutritionMatch = text.match(/Nutrition(?:\s*Information)?:?\s*([\s\S]*?)(?:\n\n|$)/i);
+    // Extract nutrition info - look for patterns with or without asterisks, tildes, and ranges
+    const nutritionMatch = text.match(/(?:Nutrition(?:\s*Information)?|Approximate\s*Nutritional\s*Information):?\s*([\s\S]*?)(?:\n\n|$)/i);
     const nutritionText = nutritionMatch ? nutritionMatch[1].trim() : "";
     
-    const proteinMatch = nutritionText.match(/Protein:?\s*(\d+[\d\.]*\s*g)/i);
-    const caloriesMatch = nutritionText.match(/Calories:?\s*(\d+[\d\.]*\s*(?:kcal)?)/i);
+    // Enhanced regex to handle ranges (e.g., ~60-65g or 750-800 kcal) and optional asterisks
+    const proteinMatch = nutritionText.match(/\*?\*?\s*Protein:?\*?\*?\s*~?(\d+(?:-\d+)?)\s*-?\s*(\d+)?\s*g/i) || 
+                         nutritionText.match(/\*?\*?\s*Protein:?\*?\*?\s*~?(\d+[\d\.]*)\s*g/i);
+    const caloriesMatch = nutritionText.match(/\*?\*?\s*Calories:?\*?\*?\s*~?(\d+(?:-\d+)?)\s*-?\s*(\d+)?\s*(?:kcal)?/i) || 
+                          nutritionText.match(/\*?\*?\s*Calories:?\*?\*?\s*~?(\d+[\d\.]*)\s*(?:kcal)?/i);
+    
+    // Take the higher value from ranges for bulking goals
+    let proteinValue = "0g";
+    let caloriesValue = "0 kcal";
+    
+    if (proteinMatch) {
+      const value = proteinMatch[2] ? proteinMatch[2] : proteinMatch[1];
+      proteinValue = `${value}g`;
+    }
+    
+    if (caloriesMatch) {
+      const value = caloriesMatch[2] ? caloriesMatch[2] : caloriesMatch[1];
+      caloriesValue = `${value} kcal`;
+    }
     
     const nutritionInfo: NutritionInfo = {
-      protein: proteinMatch ? proteinMatch[1] : "0g",
-      calories: caloriesMatch ? caloriesMatch[1] : "0 kcal"
+      protein: proteinValue,
+      calories: caloriesValue
     };
 
     // Create the structured recipe
