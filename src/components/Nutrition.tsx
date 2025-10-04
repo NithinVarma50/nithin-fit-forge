@@ -44,7 +44,7 @@ const Nutrition = ({ appState, onMealAdd, onResetNutrition, onUndoMeal, canUndo 
     setIsLoadingSuggestions(true);
     try {
       const { calories: currentCal, protein: currentPro, calorieGoal, proteinGoal } = appState.nutrition;
-      const prompt = `My fitness goal is bulking for muscle gain. Today I need to consume ${calorieGoal} calories and ${proteinGoal}g of protein. So far, I've had ${Math.round(currentCal)} calories and ${Math.round(currentPro)}g of protein. Suggest a simple, high-protein Indian meal or snack I can have next to help me reach my goal. Include ingredients with amounts, preparation steps, and nutritional information.`;
+      const prompt = `My fitness goal is bulking for muscle gain. Today I need to consume ${calorieGoal} calories and ${proteinGoal}g of protein. So far, I've had ${Math.round(currentCal)} calories and ${Math.round(currentPro)}g of protein. I'm looking for ${mealType} options. Suggest 3-5 simple, high-protein Indian ${mealType.toLowerCase()} meals or options I can have to help me reach my goal. For each option, include ingredients with amounts, preparation steps, and nutritional information.`;
       
       const result = await callGeminiAPI(prompt, "recipe");
       
