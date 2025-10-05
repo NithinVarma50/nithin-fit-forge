@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#0F172A" />
+  <text x="600" y="200" font-family="Arial, sans-serif" font-size="60" fill="#FFFFFF" text-anchor="middle">Fit Forge</text>
+  <text x="600" y="280" font-family="Arial, sans-serif" font-size="30" fill="#94A3B8" text-anchor="middle">Build Your Strength</text>
+  
+  <!-- Fitness Icon -->
+  <g transform="translate(600, 400)">
+    <path d="M-100,0 C-100,-50 -50,-100 0,-100 C50,-100 100,-50 100,0 C100,50 50,100 0,100 C-50,100 -100,50 -100,0 Z" fill="none" stroke="#0EA5E9" stroke-width="10" />
+    <path d="M-30,-30 L30,30 M-30,30 L30,-30" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round" />
+  </g>
+</svg>
