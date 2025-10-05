@@ -4,54 +4,46 @@ import { parseAIContent } from "./aiParser";
 export async function callGeminiAPI(prompt: string, contentHint?: string): Promise<string | any> {
   try {
     const { data, error } = await supabase.functions.invoke('gemini-chat', {
-      body: { prompt, type: contentHint || 'general' }
+      body: { prompt }
     });
 
     if (error) {
-      console.error("AI API call failed:", error);
-      throw new Error(error.message || "Failed to call AI service");
+      console.error("Gemini API call failed:", error);
+      throw new Error(error.message || "Failed to call Gemini API");
     }
 
     if (data?.text) {
       // Parse the AI response into structured data if possible
       const structuredData = parseAIContent(data.text, contentHint);
       return structuredData;
-    } else if (data?.error) {
-      throw new Error(data.error);
     } else {
-      throw new Error("No content received from AI service");
+      throw new Error("No content received from Gemini API.");
     }
   } catch (error) {
-    console.error("AI API call failed:", error);
+    console.error("Gemini API call failed:", error);
     throw error;
   }
 }
 
 // For backward compatibility with components that expect string responses
-export async function callGeminiAPIRaw(prompt: string, messages?: Array<{ role: string; content: string }>): Promise<string> {
+export async function callGeminiAPIRaw(prompt: string): Promise<string> {
   try {
-    const requestBody = messages 
-      ? { messages, systemPrompt: prompt, type: 'chat' }
-      : { prompt, type: 'simple' };
-
     const { data, error } = await supabase.functions.invoke('gemini-chat', {
-      body: requestBody
+      body: { prompt }
     });
 
     if (error) {
-      console.error("AI API call failed:", error);
-      throw new Error(error.message || "Failed to call AI service");
+      console.error("Gemini API call failed:", error);
+      throw new Error(error.message || "Failed to call Gemini API");
     }
 
     if (data?.text) {
       return data.text;
-    } else if (data?.error) {
-      throw new Error(data.error);
     } else {
-      throw new Error("No content received from AI service");
+      throw new Error("No content received from Gemini API.");
     }
   } catch (error) {
-    console.error("AI API call failed:", error);
+    console.error("Gemini API call failed:", error);
     throw error;
   }
 }

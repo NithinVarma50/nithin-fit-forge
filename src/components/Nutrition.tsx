@@ -55,49 +55,8 @@ const Nutrition = ({ appState, onMealAdd, onResetNutrition, onUndoMeal, canUndo 
         suggestedMealType = "Lunch";
       }
       
-      const age = Math.floor((new Date().getTime() - new Date(appState.user.dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
       const { calories: currentCal, protein: currentPro, calorieGoal, proteinGoal } = appState.nutrition;
-      const remainingCal = calorieGoal - currentCal;
-      const remainingPro = proteinGoal - currentPro;
-      
-      const prompt = `Generate ${suggestedMealType} suggestions for bulking and muscle gain.
-
-User Profile:
-- Name: ${appState.user.name}, Age: ${age}
-- Goal: Bulking for muscle gain
-- Daily Targets: ${calorieGoal} calories, ${proteinGoal}g protein
-- Today's Progress: ${Math.round(currentCal)}/${calorieGoal} kcal, ${Math.round(currentPro)}/${proteinGoal}g protein consumed
-- Remaining: ${Math.round(remainingCal)} kcal, ${Math.round(remainingPro)}g protein needed
-
-Meal Type: ${suggestedMealType}
-
-Generate 3-4 high-protein Indian ${suggestedMealType.toLowerCase()} options that are:
-- Simple and practical to prepare
-- High in protein and calories for bulking
-- Suitable for the time of day
-- Include both vegetarian and non-vegetarian options
-
-For EACH meal option, provide:
-**Option [#]: [Meal Name]**
-🍽️ Ingredients:
-- [Ingredient 1 with amount]
-- [Ingredient 2 with amount]
-[etc.]
-
-👨‍🍳 Preparation:
-1. [Step 1]
-2. [Step 2]
-[etc.]
-
-📊 Nutrition:
-- Calories: ~[amount] kcal
-- Protein: ~[amount]g
-- Carbs: ~[amount]g
-- Fats: ~[amount]g
-
-⏱️ Prep Time: [time]
-
-Make the suggestions practical, delicious, and aligned with bulking goals!`;
+      const prompt = `My fitness goal is bulking for muscle gain. Today I need to consume ${calorieGoal} calories and ${proteinGoal}g of protein. So far, I've had ${Math.round(currentCal)} calories and ${Math.round(currentPro)}g of protein. I'm looking for ${suggestedMealType} options. Suggest 3-5 simple, high-protein Indian ${suggestedMealType.toLowerCase()} meals or options I can have to help me reach my goal. For each option, include ingredients with amounts, preparation steps, and nutritional information.`;
       
       const result = await callGeminiAPI(prompt, "recipe");
       
@@ -109,10 +68,8 @@ Make the suggestions practical, delicious, and aligned with bulking goals!`;
         setFoodSuggestions(result.content);
         setStructuredRecipe(null);
       }
-      toast.success("Meal ideas generated!");
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : "Failed to generate meal ideas";
-      toast.error(errorMsg);
+      toast.error("Failed to generate meal ideas. Please try again.");
       setFoodSuggestions("Failed to generate meal ideas. Please try again.");
     } finally {
       setIsLoadingSuggestions(false);
