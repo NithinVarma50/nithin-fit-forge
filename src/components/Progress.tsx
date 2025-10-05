@@ -24,35 +24,55 @@ const Progress = ({ appState, onWeightUpdate }: ProgressProps) => {
       const weightChange = appState.user.currentWeight - appState.user.initialWeight;
       const avgCalories = Math.round(appState.nutrition.calories);
       const avgProtein = Math.round(appState.nutrition.protein);
+      const calorieProgress = ((avgCalories / appState.nutrition.calorieGoal) * 100).toFixed(0);
+      const proteinProgress = ((avgProtein / appState.nutrition.proteinGoal) * 100).toFixed(0);
       
-      const prompt = `Analyze this fitness progress for ${appState.user.name} (${age} years old) with bulking goals:
+      const prompt = `Generate a comprehensive fitness progress analysis for a young bulking athlete.
 
-**Progress Data:**
-- Weight Change: ${appState.user.initialWeight}kg → ${appState.user.currentWeight}kg (${weightChange > 0 ? '+' : ''}${weightChange.toFixed(1)}kg)
-- Target: ${appState.user.goals.targetWeight}
+User Profile:
+- Name: ${appState.user.name}
+- Age: ${age} years old
+- Goals: ${appState.user.goals.primary.join(', ')}
+
+Progress Metrics:
+- Weight Progress: ${appState.user.initialWeight}kg → ${appState.user.currentWeight}kg (${weightChange > 0 ? '+' : ''}${weightChange.toFixed(1)}kg change)
+- Target Weight: ${appState.user.goals.targetWeight}
 - Workout Streak: ${appState.workoutStreak} days
-- Today's Nutrition: ${avgCalories}/${appState.nutrition.calorieGoal} kcal, ${avgProtein}/${appState.nutrition.proteinGoal}g protein
+- Workouts This Month: ${workoutsThisMonth} sessions
+- Today's Nutrition: ${avgCalories}/${appState.nutrition.calorieGoal} kcal (${calorieProgress}%), ${avgProtein}/${appState.nutrition.proteinGoal}g protein (${proteinProgress}%)
 
-Provide a detailed analysis in this format:
+Provide a detailed, motivating analysis in this EXACT format:
 
 **📊 Progress Analysis**
-[Evaluate weight gain rate, consistency, and overall progress]
+[2-3 sentences evaluating overall progress, weight gain rate (healthy is 0.5-1kg per month for bulking), and consistency. Be specific with numbers.]
 
-**💪 Strengths**
-[List 2-3 things being done well]
+**💪 What's Working Well**
+• [Specific achievement 1 with data]
+• [Specific achievement 2 with data]
+• [Specific achievement 3 with data]
 
-**🎯 Areas for Improvement**
-[List 2-3 specific areas to focus on]
+**🎯 Areas to Optimize**
+• [Specific area 1 with actionable advice]
+• [Specific area 2 with actionable advice]  
+• [Specific area 3 with actionable advice]
 
-**🚀 Next Month Action Plan**
-[3-4 concrete, actionable steps to optimize results]
+**🚀 Next 30 Days Action Plan**
+1. [Concrete action item 1 - be specific about numbers/frequency]
+2. [Concrete action item 2 - be specific about numbers/frequency]
+3. [Concrete action item 3 - be specific about numbers/frequency]
+4. [Concrete action item 4 - be specific about numbers/frequency]
 
-Keep it motivating, data-driven, and Gen-Z friendly!`;
+**💡 Pro Tips**
+[2-3 advanced tips for optimizing bulking results]
+
+Keep it motivating, data-driven, and use a supportive coaching tone!`;
       
       const text = await callGeminiAPIRaw(prompt);
       setAiSummary(text);
+      toast.success("Progress analysis generated!");
     } catch (error) {
-      toast.error("Failed to generate summary. Please try again.");
+      const errorMsg = error instanceof Error ? error.message : "Failed to generate summary";
+      toast.error(errorMsg);
     } finally {
       setIsLoadingSummary(false);
     }

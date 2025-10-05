@@ -19,22 +19,37 @@ const WeeklyMealPlanner = ({ appState }: WeeklyMealPlannerProps) => {
   const handleGenerate = async () => {
     setIsLoading(true);
     try {
-      const prompt = `Create a 7-day meal plan for bulking and muscle gain with the following requirements:
+      const age = Math.floor((new Date().getTime() - new Date(appState.user.dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+      
+      const prompt = `Create a complete 7-day meal plan optimized for bulking and muscle gain.
 
-User: ${appState.user.name}
-Daily Goals: ${appState.nutrition.calorieGoal} calories, ${appState.nutrition.proteinGoal}g protein
-Cuisine Preference: Indian meals
-Meal Structure: Breakfast, Lunch, Snack, Dinner
+User Profile:
+- Name: ${appState.user.name}
+- Age: ${age}
+- Current Weight: ${appState.user.currentWeight}kg
+- Target: ${appState.user.goals.targetWeight}
+- Daily Nutrition Goals: ${appState.nutrition.calorieGoal} calories, ${appState.nutrition.proteinGoal}g protein
 
-For EACH day, provide:
-**[DAY]**
-🌅 Breakfast: [Simple meal with calories and protein]
-🍽️ Lunch: [Simple meal with calories and protein]
-🍪 Snack: [Simple snack with calories and protein]
-🌙 Dinner: [Simple meal with calories and protein]
-Daily Total: ~[calories] kcal, ~[protein]g protein
+Requirements:
+- Cuisine: Primarily Indian meals (with variety)
+- Meal Structure: 4 meals per day (Breakfast, Lunch, Snack, Dinner)
+- High protein, calorie-dense meals for bulking
+- Include both vegetarian and non-vegetarian options
+- Practical, easy-to-prepare meals
+- Vary meals across the week to avoid monotony
 
-Keep meals simple, practical, and high in protein. Vary the meals across the week. Focus on whole foods that support muscle growth.`;
+Format EXACTLY as follows for EACH DAY:
+
+**Monday**
+🌅 Breakfast: [Meal name] - [calories]kcal, [protein]g protein
+🍽️ Lunch: [Meal name] - [calories]kcal, [protein]g protein  
+🍪 Snack: [Snack name] - [calories]kcal, [protein]g protein
+🌙 Dinner: [Meal name] - [calories]kcal, [protein]g protein
+📊 Daily Total: ~[total calories] kcal, ~[total protein]g protein
+
+[Repeat for Tuesday through Sunday]
+
+Keep meals simple, affordable, and suitable for muscle building. Include portion sizes and meal timing suggestions where helpful.`;
 
       const result = await callGeminiAPIRaw(prompt);
       
@@ -48,10 +63,16 @@ Keep meals simple, practical, and high in protein. Vary the meals across the wee
         }
       });
 
+      if (Object.keys(parsedPlan).length === 0) {
+        // Fallback: just display the raw result
+        parsedPlan["Monday"] = result;
+      }
+
       setMealPlan(parsedPlan);
       toast.success("Weekly meal plan generated!");
     } catch (error) {
-      toast.error("Failed to generate meal plan. Please try again.");
+      const errorMsg = error instanceof Error ? error.message : "Failed to generate meal plan";
+      toast.error(errorMsg);
     } finally {
       setIsLoading(false);
     }

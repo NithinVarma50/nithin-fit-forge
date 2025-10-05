@@ -52,17 +52,36 @@ const AICoach = ({ appState }: AICoachProps) => {
       // Calculate age from DOB
       const age = Math.floor((new Date().getTime() - new Date(appState.user.dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
       
-      const context = `User Profile: ${appState.user.name}, Age: ${age}, Goal: Bulking
-Current Weight: ${appState.user.currentWeight}kg, Target: ${appState.user.goals.targetWeight}
-Daily Goals: ${appState.nutrition.calorieGoal} calories, ${appState.nutrition.proteinGoal}g protein
-Current Progress: ${Math.round(appState.nutrition.calories)} calories, ${Math.round(appState.nutrition.protein)}g protein consumed today
-Workout Streak: ${appState.workoutStreak} days
+      const systemPrompt = `You are an expert fitness coach specializing in bulking and muscle gain for young adults. 
 
-You are a knowledgeable, motivating fitness coach specializing in bulking and muscle gain for young adults. Provide practical, actionable advice. Keep responses concise and encouraging.
+User Profile:
+- Name: ${appState.user.name}
+- Age: ${age} years old
+- Current Weight: ${appState.user.currentWeight}kg
+- Target Weight: ${appState.user.goals.targetWeight}
+- Goals: ${appState.user.goals.primary.join(', ')}
+- Daily Nutrition Goals: ${appState.nutrition.calorieGoal} calories, ${appState.nutrition.proteinGoal}g protein
+- Today's Progress: ${Math.round(appState.nutrition.calories)} calories, ${Math.round(appState.nutrition.protein)}g protein consumed
+- Workout Streak: ${appState.workoutStreak} days
 
-User Question: ${input}`;
+Coaching Style:
+- Be knowledgeable, motivating, and supportive
+- Provide practical, actionable advice tailored to bulking and muscle gain
+- Keep responses concise (2-3 paragraphs max) but informative
+- Use an energetic, Gen-Z friendly tone
+- Reference the user's current stats when relevant
+- Focus on progressive overload, proper nutrition, and recovery
+- When discussing exercises, include form tips and safety considerations`;
 
-      const response = await callGeminiAPIRaw(context);
+      // Build conversation context with last 10 messages for context
+      const conversationMessages = messages.slice(-10).map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+      
+      conversationMessages.push({ role: "user", content: input });
+
+      const response = await callGeminiAPIRaw(systemPrompt, conversationMessages);
 
       const assistantMessage: Message = {
         role: "assistant",
@@ -72,7 +91,9 @@ User Question: ${input}`;
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      toast.error("Failed to get response. Please try again.");
+      const errorMsg = error instanceof Error ? error.message : "Failed to get response";
+      toast.error(errorMsg);
+      // Remove the user message since AI failed
       setMessages((prev) => prev.slice(0, -1));
     } finally {
       setIsLoading(false);

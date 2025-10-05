@@ -21,35 +21,61 @@ const AIWorkoutGenerator = ({ appState, onWorkoutGenerated }: AIWorkoutGenerator
   const handleGenerate = async () => {
     setIsLoading(true);
     try {
+      const age = Math.floor((new Date().getTime() - new Date(appState.user.dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+      
       const prompt = `Create a detailed ${duration}-minute ${muscleGroup} workout for bulking and muscle gain.
-Equipment available: ${equipment}
-Fitness level: Intermediate
-Goal: Muscle hypertrophy and strength
 
-Format the workout as:
+User Profile:
+- Name: ${appState.user.name}
+- Age: ${age}
+- Current Weight: ${appState.user.currentWeight}kg
+- Goal: ${appState.user.goals.primary.join(', ')}
+- Fitness Level: Intermediate
+- Equipment: ${equipment}
+
+Requirements:
+- Primary Goal: Muscle hypertrophy and strength for bulking
+- Focus on compound movements and progressive overload
+- Include proper warm-up and cool-down
+- Provide detailed form cues for safety
+
+Format the workout EXACTLY as follows:
+
 **Warm-up (5 mins)**
-- List warm-up exercises
+- [Exercise 1]: [Duration/Reps]
+- [Exercise 2]: [Duration/Reps]
+- [Exercise 3]: [Duration/Reps]
 
-**Main Workout**
-For each exercise include:
-- Exercise name
-- Sets x Reps
-- Rest period
-- Form tips
+**Main Workout (${parseInt(duration) - 10} mins)**
+
+Exercise 1: [Name]
+- Sets x Reps: [e.g., 3 x 8-10]
+- Rest: [e.g., 90 seconds]
+- Form Tips: [Key technique points]
+
+Exercise 2: [Name]
+- Sets x Reps: [e.g., 3 x 8-10]
+- Rest: [e.g., 60 seconds]
+- Form Tips: [Key technique points]
+
+[Continue for 4-6 exercises total]
 
 **Cool-down (5 mins)**
-- Stretching routine
+- [Stretch 1]: [Duration]
+- [Stretch 2]: [Duration]
+- [Stretch 3]: [Duration]
 
-Focus on compound movements and progressive overload. Make it practical and effective for ${appState.user.name}'s bulking goals.`;
+Make it practical, safe, and effective for ${appState.user.name}'s bulking goals!`;
 
-      const result = await callGeminiAPI(prompt);
+      const result = await callGeminiAPI(prompt, 'workout');
       const workoutText = result.type === "text" ? result.content : result.content.description || "Workout generated";
       
       setGeneratedWorkout(workoutText);
       onWorkoutGenerated?.(workoutText);
       toast.success("Workout generated successfully!");
     } catch (error) {
-      toast.error("Failed to generate workout. Please try again.");
+      const errorMsg = error instanceof Error ? error.message : "Failed to generate workout";
+      toast.error(errorMsg);
     } finally {
       setIsLoading(false);
     }
