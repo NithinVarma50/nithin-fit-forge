@@ -40,4 +40,5 @@ export interface AppState {
   nutrition: Nutrition;
   weightHistory: WeightHistory;
   lastVisitDate: string | null;
+  lastWeekReset: string | null; // Track when the week was last reset
 }

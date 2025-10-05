@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AppState } from "@/types/fitness";
-import { getTodayName, getTodayDate, saveAppState, loadAppState } from "@/utils/fitness";
+import { getTodayName, getTodayDate, saveAppState, loadAppState, getWeekStartDate, isInCurrentWeek } from "@/utils/fitness";
 import Dashboard from "@/components/Dashboard";
 import Workouts from "@/components/Workouts";
 import Nutrition from "@/components/Nutrition";
@@ -48,7 +48,8 @@ const Index = () => {
       labels: ['Start'],
       data: [58]
     },
-    lastVisitDate: null
+    lastVisitDate: null,
+    lastWeekReset: null
   });
 
   // Sharing configuration
@@ -78,20 +79,43 @@ const Index = () => {
 
   const resetDailyStatus = () => {
     const todayStr = getTodayDate();
+    const currentWeekStart = getWeekStartDate();
+    
     setAppState(prev => {
+      // Check if we need to reset for a new week
+      const isNewWeek = !prev.lastWeekReset || prev.lastWeekReset !== currentWeekStart;
+      
       if (prev.lastVisitDate !== todayStr) {
-        const updatedPlan = prev.workoutPlan.map(w => ({
-          ...w,
-          completed: w.checkinDate === todayStr ? w.completed : false
-        }));
+        let updatedPlan = prev.workoutPlan;
+        
+        // If it's a new week, reset all workouts
+        if (isNewWeek) {
+          updatedPlan = prev.workoutPlan.map(w => ({
+            ...w,
+            completed: false,
+            checkinDate: null
+          }));
+        } else {
+          // Keep completed workouts from this week, they stay completed
+          updatedPlan = prev.workoutPlan.map(w => {
+            // If workout was completed this week, keep it completed
+            if (w.completed && w.checkinDate && isInCurrentWeek(w.checkinDate)) {
+              return w;
+            }
+            // If workout was from previous week, reset it
+            if (w.checkinDate && !isInCurrentWeek(w.checkinDate)) {
+              return { ...w, completed: false, checkinDate: null };
+            }
+            return w;
+          });
+        }
 
-        // Get yesterday's date string for comparison
+        // Calculate streak
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayStr = yesterday.toISOString().split('T')[0];
         
-        // Get the most recent workout date string
-        const lastWorkoutDateStr = prev.workoutPlan
+        const lastWorkoutDateStr = updatedPlan
           .filter(w => w.checkinDate)
           .map(w => w.checkinDate!)
           .sort((a, b) => b.localeCompare(a))[0];
@@ -102,13 +126,14 @@ const Index = () => {
         return {
           ...prev,
           workoutPlan: updatedPlan,
-          workoutStreak: newStreak,
+          workoutStreak: isNewWeek ? 0 : newStreak,
           nutrition: {
             ...prev.nutrition,
             calories: 0,
             protein: 0
           },
-          lastVisitDate: todayStr
+          lastVisitDate: todayStr,
+          lastWeekReset: isNewWeek ? currentWeekStart : prev.lastWeekReset
         };
       }
       return prev;

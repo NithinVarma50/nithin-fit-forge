@@ -22,6 +22,24 @@ export function getTodayDate(): string {
   return new Date().toISOString().split('T')[0];
 }
 
+// Get the start of the current week (Sunday)
+export function getWeekStartDate(): string {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - dayOfWeek);
+  return weekStart.toISOString().split('T')[0];
+}
+
+// Check if a date is in the current week
+export function isInCurrentWeek(dateStr: string): boolean {
+  const date = new Date(dateStr);
+  const weekStart = new Date(getWeekStartDate());
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 7);
+  return date >= weekStart && date < weekEnd;
+}
+
 // Storage utility functions
 export function saveAppState(appState: any): void {
   try {
