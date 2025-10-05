@@ -79,7 +79,9 @@ export const updateSharingMetaTags = (platform: SharingPlatform, title: string, 
   
   const config = platformConfigs[platform];
   const baseUrl = window.location.origin;
-  const imageUrl = `${baseUrl}${config.image}`;
+  // Add cache-busting parameter to force fresh image fetch
+  const cacheBuster = `?v=${Date.now()}`;
+  const imageUrl = `${baseUrl}${config.image}${cacheBuster}`;
   const shareUrl = url || window.location.href;
   
   // Update or create meta tags

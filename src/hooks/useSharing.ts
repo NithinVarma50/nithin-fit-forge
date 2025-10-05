@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { detectSharingPlatform, updateSharingMetaTags, type SharingPlatform } from '@/utils/sharing';
+import { clearInstagramCache, clearFacebookCache } from '@/utils/cacheBuster';
 
 interface UseSharingOptions {
   title: string;
@@ -18,6 +19,13 @@ export const useSharing = (options: UseSharingOptions) => {
       const detectedPlatform = detectSharingPlatform();
       setPlatform(detectedPlatform);
       updateSharingMetaTags(detectedPlatform, title, description, url);
+      
+      // Clear cache for specific platforms that are known to cache heavily
+      if (detectedPlatform === 'instagram') {
+        clearInstagramCache();
+      } else if (detectedPlatform === 'facebook') {
+        clearFacebookCache();
+      }
     }
   }, [title, description, url, autoDetect]);
 
