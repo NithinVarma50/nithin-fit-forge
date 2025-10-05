@@ -1,0 +1,66 @@
+<svg width="1200" height="627" viewBox="0 0 1200 627" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="627" fill="#0A66C2"/>
+  
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0A66C2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#004182;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Professional gym background -->
+  <rect width="1200" height="627" fill="url(#linkedinGradient)"/>
+  
+  <!-- Gym equipment silhouettes -->
+  <g opacity="0.1">
+    <!-- Dumbbells -->
+    <rect x="100" y="400" width="200" height="20" rx="10" fill="white"/>
+    <rect x="80" y="380" width="20" height="60" rx="10" fill="white"/>
+    <rect x="280" y="380" width="20" height="60" rx="10" fill="white"/>
+    
+    <!-- Barbell -->
+    <rect x="500" y="420" width="300" height="15" rx="7.5" fill="white"/>
+    <rect x="480" y="400" width="20" height="60" rx="10" fill="white"/>
+    <rect x="800" y="400" width="20" height="60" rx="10" fill="white"/>
+    
+    <!-- Treadmill -->
+    <rect x="900" y="350" width="150" height="100" rx="10" fill="white"/>
+  </g>
+  
+  <!-- Main content area -->
+  <rect x="50" y="50" width="1100" height="527" rx="20" fill="rgba(255,255,255,0.95)" stroke="#E1E5E9" stroke-width="2"/>
+  
+  <!-- LinkedIn logo area -->
+  <rect x="100" y="100" width="60" height="60" rx="8" fill="#0A66C2"/>
+  <text x="130" y="140" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">in</text>
+  
+  <!-- Title -->
+  <text x="200" y="130" fill="#0A66C2" font-family="Arial, sans-serif" font-size="36" font-weight="bold">Fit Forge</text>
+  <text x="200" y="170" fill="#666" font-family="Arial, sans-serif" font-size="18">Professional Fitness Tracking</text>
+  
+  <!-- Main content -->
+  <text x="100" y="250" fill="#333" font-family="Arial, sans-serif" font-size="28" font-weight="bold">Track Your Professional Fitness Journey</text>
+  
+  <text x="100" y="300" fill="#666" font-family="Arial, sans-serif" font-size="18">• AI-Powered Workout Recommendations</text>
+  <text x="100" y="330" fill="#666" font-family="Arial, sans-serif" font-size="18">• Professional Nutrition Planning</text>
+  <text x="100" y="360" fill="#666" font-family="Arial, sans-serif" font-size="18">• Progress Analytics & Insights</text>
+  <text x="100" y="390" fill="#666" font-family="Arial, sans-serif" font-size="18">• Goal Tracking & Achievement</text>
+  
+  <!-- Call to action -->
+  <rect x="100" y="450" width="200" height="50" rx="25" fill="#0A66C2"/>
+  <text x="200" y="480" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Start Your Journey</text>
+  
+  <!-- Stats -->
+  <text x="800" y="250" fill="#0A66C2" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Your Progress</text>
+  <text x="800" y="280" fill="#666" font-family="Arial, sans-serif" font-size="16">Workout Streak: 7 days</text>
+  <text x="800" y="310" fill="#666" font-family="Arial, sans-serif" font-size="16">Calories Burned: 2,100</text>
+  <text x="800" y="340" fill="#666" font-family="Arial, sans-serif" font-size="16">Goals Achieved: 3/5</text>
+  
+  <!-- Professional gym icon -->
+  <g transform="translate(900, 200)">
+    <rect x="0" y="0" width="80" height="80" rx="10" fill="#0A66C2"/>
+    <text x="40" y="50" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="40">💪</text>
+  </g>
+</svg>

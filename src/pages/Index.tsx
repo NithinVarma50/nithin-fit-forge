@@ -8,6 +8,9 @@ import Workouts from "@/components/Workouts";
 import Nutrition from "@/components/Nutrition";
 import Progress from "@/components/Progress";
 import AIHub from "@/pages/AIHub";
+import ShareButton from "@/components/ShareButton";
+import ShareImage from "@/components/ShareImage";
+import { useSharing } from "@/hooks/useSharing";
 
 const Index = () => {
   const [appState, setAppState] = useState<AppState>({
@@ -46,6 +49,17 @@ const Index = () => {
       data: [58]
     },
     lastVisitDate: null
+  });
+
+  // Sharing configuration
+  const shareTitle = "Fit Forge - My Fitness Journey";
+  const shareDescription = `Track my fitness progress with ${appState.user.name}'s personalized workout and nutrition plan. Join me on this fitness journey!`;
+  
+  // Initialize sharing with dynamic content
+  const { platform, updateSharing } = useSharing({
+    title: shareTitle,
+    description: shareDescription,
+    autoDetect: true
   });
 
   // Load saved state on initial render
@@ -179,16 +193,31 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Dynamic sharing meta tags */}
+      <ShareImage 
+        title={shareTitle}
+        description={shareDescription}
+        platform={platform}
+      />
+      
       <div className="max-w-7xl mx-auto p-4 md:p-6">
         <header className="flex justify-between items-center mb-6">
           <h1 className="text-2xl md:text-3xl font-bold">
             {appState.user.name}'s Fitness Tracker
           </h1>
-          <Avatar className="w-12 h-12 bg-primary">
-            <AvatarFallback className="bg-primary text-primary-foreground text-lg font-bold">
-              {appState.user.name.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
+          <div className="flex items-center gap-4">
+            <ShareButton 
+              title={shareTitle}
+              description={shareDescription}
+              variant="outline"
+              size="sm"
+            />
+            <Avatar className="w-12 h-12 bg-primary">
+              <AvatarFallback className="bg-primary text-primary-foreground text-lg font-bold">
+                {appState.user.name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
         </header>
 
         <Tabs defaultValue="dashboard" className="space-y-6">

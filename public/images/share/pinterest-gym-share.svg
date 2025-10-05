@@ -1,0 +1,82 @@
+<svg width="1000" height="1500" viewBox="0 0 1000 1500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1000" height="1500" fill="#E60023"/>
+  
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="pinterestGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E60023;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#BD001C;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Pinterest-style background -->
+  <rect width="1000" height="1500" fill="url(#pinterestGradient)"/>
+  
+  <!-- Main content area -->
+  <rect x="50" y="50" width="900" height="1400" rx="20" fill="white" stroke="#E1E5E9" stroke-width="2"/>
+  
+  <!-- Pinterest logo area -->
+  <circle cx="100" cy="100" r="30" fill="#E60023"/>
+  <text x="100" y="110" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">P</text>
+  
+  <!-- Title -->
+  <text x="200" y="130" fill="#E60023" font-family="Arial, sans-serif" font-size="32" font-weight="bold">Fit Forge</text>
+  <text x="200" y="160" fill="#666" font-family="Arial, sans-serif" font-size="16">Fitness Inspiration & Tracking</text>
+  
+  <!-- Main workout image placeholder -->
+  <rect x="100" y="200" width="800" height="600" rx="15" fill="#F5F5F5" stroke="#E1E5E9" stroke-width="2"/>
+  
+  <!-- Gym equipment icons -->
+  <g transform="translate(150, 250)">
+    <!-- Dumbbell -->
+    <rect x="0" y="0" width="100" height="20" rx="10" fill="#E60023"/>
+    <rect x="-10" y="-20" width="20" height="60" rx="10" fill="#E60023"/>
+    <rect x="90" y="-20" width="20" height="60" rx="10" fill="#E60023"/>
+  </g>
+  
+  <g transform="translate(400, 250)">
+    <!-- Barbell -->
+    <rect x="0" y="0" width="150" height="15" rx="7.5" fill="#E60023"/>
+    <rect x="-15" y="-20" width="20" height="60" rx="10" fill="#E60023"/>
+    <rect x="145" y="-20" width="20" height="60" rx="10" fill="#E60023"/>
+  </g>
+  
+  <g transform="translate(650, 250)">
+    <!-- Kettlebell -->
+    <circle cx="50" cy="50" r="40" fill="#E60023"/>
+    <rect x="45" y="10" width="10" height="20" rx="5" fill="#E60023"/>
+  </g>
+  
+  <!-- Workout title -->
+  <text x="100" y="850" fill="#333" font-family="Arial, sans-serif" font-size="28" font-weight="bold">💪 Strength Training Workout</text>
+  
+  <!-- Workout details -->
+  <text x="100" y="900" fill="#666" font-family="Arial, sans-serif" font-size="18">• Bench Press: 3 sets x 8 reps</text>
+  <text x="100" y="930" fill="#666" font-family="Arial, sans-serif" font-size="18">• Squats: 3 sets x 10 reps</text>
+  <text x="100" y="960" fill="#666" font-family="Arial, sans-serif" font-size="18">• Deadlifts: 3 sets x 6 reps</text>
+  <text x="100" y="990" fill="#666" font-family="Arial, sans-serif" font-size="18">• Pull-ups: 3 sets x 5 reps</text>
+  
+  <!-- Nutrition section -->
+  <text x="100" y="1050" fill="#333" font-family="Arial, sans-serif" font-size="24" font-weight="bold">🥗 Today's Nutrition</text>
+  <text x="100" y="1080" fill="#666" font-family="Arial, sans-serif" font-size="16">Calories: 2,800 / 3,000</text>
+  <text x="100" y="1100" fill="#666" font-family="Arial, sans-serif" font-size="16">Protein: 180g / 200g</text>
+  
+  <!-- Progress bar -->
+  <rect x="100" y="1130" width="800" height="20" rx="10" fill="#E1E5E9"/>
+  <rect x="100" y="1130" width="640" height="20" rx="10" fill="#E60023"/>
+  <text x="500" y="1145" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12" font-weight="bold">80% Complete</text>
+  
+  <!-- Call to action -->
+  <rect x="100" y="1200" width="200" height="60" rx="30" fill="#E60023"/>
+  <text x="200" y="1235" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Pin This Workout</text>
+  
+  <!-- Social proof -->
+  <text x="100" y="1300" fill="#666" font-family="Arial, sans-serif" font-size="16">📌 1.2k saves • 💬 45 comments</text>
+  
+  <!-- Hashtags -->
+  <text x="100" y="1350" fill="#E60023" font-family="Arial, sans-serif" font-size="16" font-weight="bold">#FitnessJourney #StrengthTraining #FitForge #WorkoutMotivation</text>
+  
+  <!-- Bottom branding -->
+  <text x="500" y="1450" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="14">Track your fitness journey with Fit Forge</text>
+</svg>

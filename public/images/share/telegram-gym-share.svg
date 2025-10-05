@@ -1,0 +1,57 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Telegram blue background -->
+  <rect width="1200" height="630" fill="#0088CC"/>
+  
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="telegramGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0088CC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#006699;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#telegramGradient)"/>
+  
+  <!-- Main content area -->
+  <rect x="50" y="50" width="1100" height="530" rx="20" fill="white" stroke="#E1E5E9" stroke-width="2"/>
+  
+  <!-- Telegram logo -->
+  <circle cx="100" cy="100" r="30" fill="#0088CC"/>
+  <text x="100" y="110" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="20" font-weight="bold">✈️</text>
+  
+  <!-- Title -->
+  <text x="200" y="120" fill="#0088CC" font-family="Arial, sans-serif" font-size="32" font-weight="bold">Fit Forge</text>
+  <text x="200" y="150" fill="#666" font-family="Arial, sans-serif" font-size="16">Fitness Progress Update</text>
+  
+  <!-- Main content -->
+  <text x="100" y="220" fill="#333" font-family="Arial, sans-serif" font-size="24" font-weight="bold">💪 Workout Complete!</text>
+  
+  <text x="100" y="260" fill="#666" font-family="Arial, sans-serif" font-size="18">Today's achievements:</text>
+  <text x="100" y="285" fill="#666" font-family="Arial, sans-serif" font-size="16">• 45 minutes of strength training</text>
+  <text x="100" y="305" fill="#666" font-family="Arial, sans-serif" font-size="16">• 2,100 calories burned</text>
+  <text x="100" y="325" fill="#666" font-family="Arial, sans-serif" font-size="16">• 7-day workout streak maintained</text>
+  <text x="100" y="345" fill="#666" font-family="Arial, sans-serif" font-size="16">• 3 new personal records set</text>
+  
+  <!-- Progress section -->
+  <rect x="100" y="380" width="400" height="100" rx="15" fill="#F8F9FA" stroke="#E1E5E9" stroke-width="2"/>
+  <text x="300" y="410" text-anchor="middle" fill="#0088CC" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Weekly Progress</text>
+  <text x="300" y="435" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="14">5/7 workouts completed</text>
+  <text x="300" y="455" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="14">85% goal achievement</text>
+  
+  <!-- Stats -->
+  <rect x="600" y="380" width="400" height="100" rx="15" fill="#F8F9FA" stroke="#E1E5E9" stroke-width="2"/>
+  <text x="800" y="410" text-anchor="middle" fill="#0088CC" font-family="Arial, sans-serif" font-size="20" font-weight="bold">This Week</text>
+  <text x="800" y="435" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="14">14,700 calories burned</text>
+  <text x="800" y="455" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="14">12.5 hours training</text>
+  
+  <!-- Call to action -->
+  <rect x="100" y="520" width="200" height="40" rx="20" fill="#0088CC"/>
+  <text x="200" y="545" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Share Progress</text>
+  
+  <!-- Telegram icon -->
+  <g transform="translate(900, 200)">
+    <circle cx="50" cy="50" r="40" fill="#0088CC"/>
+    <text x="50" y="60" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="30">✈️</text>
+  </g>
+</svg>
