@@ -1,5 +1,5 @@
 // Platform detection and sharing utilities
-export type SharingPlatform = 'facebook' | 'twitter' | 'linkedin' | 'pinterest' | 'instagram' | 'whatsapp' | 'telegram' | 'default';
+export type SharingPlatform = 'facebook' | 'twitter' | 'linkedin' | 'pinterest' | 'instagram' | 'whatsapp' | 'telegram' | 'copy' | 'default';
 
 // Platform-specific image configurations
 export const platformConfigs = {
@@ -142,6 +142,8 @@ export const generateShareUrls = (url: string, title: string, description: strin
 
 // Share to specific platform
 export const shareToPlatform = (platform: SharingPlatform, url: string, title: string, description: string) => {
+  if (platform === 'copy' || platform === 'default') return;
+  
   const shareUrls = generateShareUrls(url, title, description);
   const shareUrl = shareUrls[platform];
   

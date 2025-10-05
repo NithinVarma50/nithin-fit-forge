@@ -85,14 +85,19 @@ const Index = () => {
           completed: w.checkinDate === todayStr ? w.completed : false
         }));
 
+        // Get yesterday's date string for comparison
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
-        const lastWorkoutDate = prev.workoutPlan
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+        
+        // Get the most recent workout date string
+        const lastWorkoutDateStr = prev.workoutPlan
           .filter(w => w.checkinDate)
-          .map(w => new Date(w.checkinDate!))
-          .sort((a, b) => b.getTime() - a.getTime())[0];
+          .map(w => w.checkinDate!)
+          .sort((a, b) => b.localeCompare(a))[0];
 
-        const newStreak = lastWorkoutDate && lastWorkoutDate < yesterday ? 0 : prev.workoutStreak;
+        // Reset streak only if last workout was before yesterday (more than 1 day gap)
+        const newStreak = lastWorkoutDateStr && lastWorkoutDateStr < yesterdayStr ? 0 : prev.workoutStreak;
 
         return {
           ...prev,
